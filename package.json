@@ -1,0 +1,27 @@
+{
+  "name": "stilessandgravel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Stiles Sand & Gravel monorepo",
+  "workspaces": [
+    "apps/web",
+    "apps/api"
+  ],
+  "scripts": {
+    "dev": "concurrently -n WEB,API -c blue,green \"npm run dev -w apps/web\" \"npm run dev -w apps/api\"",
+    "build": "npm run build -w apps/web && npm run build -w apps/api",
+    "start": "npm run start -w apps/api",
+    "lint": "npm run lint -w apps/web && npm run lint -w apps/api",
+    "format": "prettier --write \"**/*.{ts,js,json,md,html,css,scss}\""
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.0.1",
+    "prettier": "^3.5.2",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,57 @@
+<section class="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+  <h1 class="text-4xl font-black text-white">Gallery</h1>
+  <p class="mt-3 text-neutral-300">Real project photos and videos from our trucks and equipment.</p>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    @for (item of gallery(); track item.id) {
+      <button
+        type="button"
+        class="overflow-hidden rounded-lg border border-neutral-700 bg-neutral-900 text-left"
+        (click)="open(item)"
+      >
+        @if (item.kind === 'image') {
+          <img
+            [src]="item.url"
+            [alt]="item.alt"
+            [width]="item.width"
+            [height]="item.height"
+            loading="lazy"
+            class="h-56 w-full object-cover"
+          />
+        } @else {
+          <video class="h-56 w-full object-cover" [poster]="item.posterUrl || ''" preload="metadata" muted>
+            <source [src]="item.url" />
+          </video>
+        }
+      </button>
+    }
+  </div>
+</section>
+
+@if (selected(); as active) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-950/90 p-4" (click)="close()">
+    <div class="max-h-[90vh] w-full max-w-5xl" (click)="$event.stopPropagation()">
+      <button
+        type="button"
+        class="mb-2 rounded bg-yellow-500 px-3 py-1 text-sm font-bold text-neutral-950"
+        (click)="close()"
+      >
+        Close
+      </button>
+      @if (active.kind === 'image') {
+        <img [src]="active.url" [alt]="active.alt" class="max-h-[82vh] w-full rounded object-contain" />
+      } @else {
+        <video
+          [poster]="active.posterUrl || ''"
+          controls
+          class="max-h-[82vh] w-full rounded"
+          preload="metadata"
+          muted
+          playsinline
+        >
+          <source [src]="active.url" />
+        </video>
+      }
+    </div>
+  </div>
+}

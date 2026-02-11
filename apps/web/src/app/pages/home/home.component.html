@@ -1,0 +1,169 @@
+<section class="relative isolate overflow-hidden">
+  @if (hero(); as heroMedia) {
+    @if (heroMedia.kind === 'image') {
+      <img
+        [src]="heroMedia.url"
+        [alt]="heroMedia.alt"
+        [width]="heroMedia.width"
+        [height]="heroMedia.height"
+        fetchpriority="high"
+        class="h-[65vh] min-h-[460px] w-full object-cover"
+      />
+    } @else {
+      <video
+        class="h-[65vh] min-h-[460px] w-full object-cover"
+        [poster]="heroMedia.posterUrl || ''"
+        controls
+        muted
+        playsinline
+      >
+        <source [src]="heroMedia.url" />
+        Your browser cannot play this video. Please download it to view.
+      </video>
+    }
+  } @else {
+    <div class="h-[65vh] min-h-[460px] w-full bg-[linear-gradient(120deg,#1f1f1f,#3f3f46,#ab2f44)]"></div>
+  }
+
+  <div class="absolute inset-0 bg-neutral-950/45"></div>
+  <div class="absolute inset-0 flex items-center">
+    <div class="mx-auto w-full max-w-7xl px-4 lg:px-8">
+      <h1 class="max-w-3xl text-4xl font-black leading-tight text-white md:text-6xl">
+        Sand, Gravel & Bulk Materials Delivered
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-neutral-100 md:text-xl">
+        From 1 to 15 yards in one trip. Fast delivery. Big stockpiles available.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          [href]="business.phoneHref"
+          class="btn-brand rounded px-5 py-3 text-sm font-extrabold uppercase tracking-wide transition"
+          >Call Now</a
+        >
+        <a
+          routerLink="/contact"
+          class="rounded border border-neutral-200 px-5 py-3 text-sm font-extrabold uppercase tracking-wide text-white transition hover:bg-white hover:text-neutral-950"
+          >Request a Quote</a
+        >
+      </div>
+    </div>
+  </div>
+  @if (heroItems().length > 1) {
+    <div class="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+      @for (item of heroItems(); track item.id; let i = $index) {
+        <button
+          type="button"
+          (click)="goToHero(i)"
+          class="h-2.5 w-2.5 rounded-full border border-neutral-100/70 bg-neutral-400 transition"
+          [class.bg-yellow-400]="heroIndex() === i"
+          [attr.aria-label]="'Show hero image ' + (i + 1)"
+        ></button>
+      }
+    </div>
+  }
+</section>
+
+<section class="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+  <div class="grid gap-8 lg:grid-cols-2">
+    <div>
+      <h2 class="text-3xl font-black text-white">Local, Reliable, Built for Heavy Work</h2>
+      <p class="mt-4 text-neutral-300">
+        Stiles Sand & Gravel runs real trucks and real equipment every day to keep contractors, homeowners,
+        and job sites moving on schedule.
+      </p>
+      <p class="mt-4 text-neutral-300">
+        Our team handles short-notice deliveries, grading prep, and cleanup support across Southwest Michigan
+        with a focus on consistency and clear communication.
+      </p>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      @for (item of localSectionVisuals(); track item.id) {
+        <img
+          [src]="item.url"
+          [alt]="item.alt"
+          [width]="item.width"
+          [height]="item.height"
+          loading="lazy"
+          class="h-44 w-full rounded-lg object-cover"
+        />
+      }
+    </div>
+  </div>
+</section>
+
+<section class="bg-neutral-900/70 py-14">
+  <div class="mx-auto max-w-7xl px-4 lg:px-8">
+    <h2 class="text-3xl font-black text-white">Services</h2>
+    <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      @for (service of services; track service; let i = $index) {
+        <article class="rounded-lg border border-neutral-700 bg-neutral-900 p-4">
+          <p class="text-lg font-bold text-yellow-300">{{ service }}</p>
+          @if (serviceVisualMap()[service]; as mediaItem) {
+            @if (mediaItem.kind === 'video') {
+              <video
+                class="mt-3 h-40 w-full rounded object-cover"
+                controls
+                muted
+                playsinline
+                preload="metadata"
+                [poster]="mediaItem.posterUrl || ''"
+              >
+                <source [src]="mediaItem.url" />
+              </video>
+            } @else {
+              <img
+                [src]="mediaItem.url"
+                [alt]="mediaItem.alt"
+                [width]="mediaItem.width"
+                [height]="mediaItem.height"
+                loading="lazy"
+                class="mt-3 h-40 w-full rounded object-cover"
+              />
+            }
+          }
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+  <h2 class="text-3xl font-black text-white">Materials</h2>
+  <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    @for (material of materials; track material; let i = $index) {
+      <article class="rounded-lg border border-neutral-700 bg-neutral-900/60 p-4">
+        <h3 class="text-lg font-bold text-white">{{ material }}</h3>
+        @if (materialVisualMap()[material]; as image) {
+          <img
+            [src]="image.url"
+            [alt]="image.alt"
+            [width]="image.width"
+            [height]="image.height"
+            loading="lazy"
+            class="mt-3 h-32 w-full rounded object-cover"
+          />
+        }
+      </article>
+    }
+  </div>
+</section>
+
+@if (video(); as video) {
+  <section class="border-y border-neutral-800 bg-neutral-900/70 py-14">
+    <div class="mx-auto max-w-5xl px-4 lg:px-8">
+      <h2 class="text-3xl font-black text-white">Equipment in Action</h2>
+      <video
+        class="mt-5 mx-auto w-full max-w-xl rounded-lg border border-neutral-700 bg-neutral-950 object-contain max-h-[60vh]"
+        [poster]="video.posterUrl || ''"
+        controls
+        muted
+        playsinline
+        preload="metadata"
+      >
+        <source [src]="video.url" />
+        Your browser cannot play this video.
+        <a [href]="video.url" class="underline">Download video</a>
+      </video>
+    </div>
+  </section>
+}

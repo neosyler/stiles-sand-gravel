@@ -1,0 +1,21 @@
+{
+  "name": "Stiles Sand & Gravel",
+  "short_name": "Stiles S&G",
+  "description": "Sand, gravel, and bulk material delivery in Southwest Michigan.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#ab2f44",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

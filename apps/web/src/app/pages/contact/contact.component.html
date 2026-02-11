@@ -1,0 +1,68 @@
+<section class="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+  <h1 class="text-4xl font-black text-white">Contact</h1>
+  <p class="mt-3 text-neutral-300">Call, text, or submit a quote request form.</p>
+
+  <div class="mt-8 grid gap-6 lg:grid-cols-2">
+    <aside class="rounded-lg border border-neutral-700 bg-neutral-900/70 p-5">
+      <h2 class="text-2xl font-bold text-yellow-300">Direct Contact</h2>
+      <div class="mt-4 space-y-3 text-neutral-200">
+        <p>
+          <a [href]="business.phoneHref" class="font-bold hover:text-yellow-300">{{ business.phone }}</a>
+        </p>
+        <p><a [href]="business.smsHref" class="font-bold hover:text-yellow-300">Send Text Message</a></p>
+        <p><a [href]="'mailto:' + business.email" class="font-bold hover:text-yellow-300">{{ business.email }}</a></p>
+        <p>{{ business.address.street }}, {{ business.address.city }}, {{ business.address.state }} {{ business.address.zip }}</p>
+      </div>
+    </aside>
+
+    <form class="rounded-lg border border-neutral-700 bg-neutral-900/70 p-5" [formGroup]="form" (ngSubmit)="submit()">
+      <h2 class="text-2xl font-bold text-yellow-300">Request a Quote</h2>
+
+      <div class="mt-4 grid gap-3">
+        <label class="text-sm text-neutral-200">Name* <input class="form-input" formControlName="name" /></label>
+        <label class="text-sm text-neutral-200">Phone* <input class="form-input" formControlName="phone" /></label>
+        <label class="text-sm text-neutral-200">Email <input class="form-input" formControlName="email" /></label>
+        <label class="text-sm text-neutral-200">Address <input class="form-input" formControlName="address" /></label>
+        <label class="text-sm text-neutral-200">City <input class="form-input" formControlName="city" /></label>
+        <label class="text-sm text-neutral-200"
+          >Material needed <input class="form-input" formControlName="materialNeeded"
+        /></label>
+        <label class="text-sm text-neutral-200"
+          >Quantity (yards) <input class="form-input" formControlName="quantityYards"
+        /></label>
+        <label class="text-sm text-neutral-200"
+          >Preferred delivery date <input type="date" class="form-input" formControlName="preferredDeliveryDate"
+        /></label>
+        <label class="text-sm text-neutral-200"
+          >Notes
+          <textarea rows="4" class="form-input" formControlName="notes"></textarea>
+        </label>
+        <input
+          class="hidden"
+          formControlName="website"
+          autocomplete="off"
+          tabindex="-1"
+          aria-hidden="true"
+        />
+        @if (business.security.turnstileSiteKey) {
+          <div #turnstileContainer class="mt-2"></div>
+        }
+      </div>
+
+      @if (success()) {
+        <p class="mt-4 text-sm font-semibold text-emerald-300">{{ success() }}</p>
+      }
+      @if (error()) {
+        <p class="mt-4 text-sm font-semibold text-red-300">{{ error() }}</p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="loading()"
+        class="btn-brand mt-5 rounded px-4 py-2 text-sm font-bold disabled:opacity-60"
+      >
+        {{ loading() ? 'Sending...' : 'Submit Quote Request' }}
+      </button>
+    </form>
+  </div>
+</section>

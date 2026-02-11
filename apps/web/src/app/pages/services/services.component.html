@@ -1,0 +1,38 @@
+<section class="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+  <h1 class="text-4xl font-black text-white">Services</h1>
+  <p class="mt-3 max-w-3xl text-neutral-300">
+    Efficient site support and hauling services backed by dependable trucks and heavy equipment.
+  </p>
+
+  <div class="mt-8 grid gap-6 md:grid-cols-2">
+    @for (service of services; track service.title; let i = $index) {
+      <article class="rounded-lg border border-neutral-700 bg-neutral-900/70 p-5">
+        <h2 class="text-2xl font-bold text-yellow-300">{{ service.title }}</h2>
+        <p class="mt-2 text-neutral-300">{{ service.description }}</p>
+        @if (serviceVisualMap()[service.title]; as mediaItem) {
+          @if (mediaItem.kind === 'video') {
+            <video
+              class="mt-4 h-52 w-full rounded object-cover"
+              controls
+              muted
+              playsinline
+              preload="metadata"
+              [poster]="mediaItem.posterUrl || ''"
+            >
+              <source [src]="mediaItem.url" />
+            </video>
+          } @else {
+            <img
+              [src]="mediaItem.url"
+              [alt]="mediaItem.alt"
+              [width]="mediaItem.width"
+              [height]="mediaItem.height"
+              loading="lazy"
+              class="mt-4 h-52 w-full rounded object-cover"
+            />
+          }
+        }
+      </article>
+    }
+  </div>
+</section>

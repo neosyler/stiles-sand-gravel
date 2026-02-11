@@ -1,0 +1,52 @@
+<section class="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+  <h1 class="text-4xl font-black text-white">Service Area</h1>
+  <p class="mt-3 text-neutral-300">
+    Based in Battle Creek, Michigan — serving Southwest Michigan and surrounding areas.
+  </p>
+
+  <div class="mt-8 grid gap-6 lg:grid-cols-2">
+    <div class="rounded-lg border border-neutral-700 bg-neutral-900/70 p-5">
+      <h2 class="text-2xl font-bold text-yellow-300">Base Location</h2>
+      <p class="mt-2 text-neutral-300">
+        {{ business.address.street }}, {{ business.address.city }}, {{ business.address.state }}
+        {{ business.address.zip }}
+      </p>
+      <a
+        [href]="business.social.mapsLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-4 inline-block rounded border border-yellow-400 px-4 py-2 text-sm font-bold text-yellow-300 hover:bg-yellow-400 hover:text-neutral-950"
+      >
+        Get Directions
+      </a>
+
+      <h3 class="mt-6 text-lg font-bold text-white">Communities We Serve</h3>
+      <ul class="mt-2 grid grid-cols-2 gap-2 text-sm text-neutral-300">
+        @for (area of business.serviceAreas; track area) {
+          <li>{{ area }}</li>
+        }
+      </ul>
+    </div>
+
+    <div class="rounded-lg border border-neutral-700 bg-neutral-900/70 p-5">
+      <h2 class="text-2xl font-bold text-yellow-300">Map</h2>
+      @if (!showMap()) {
+        <button
+          type="button"
+          class="mt-4 rounded bg-yellow-500 px-4 py-2 text-sm font-bold text-neutral-950"
+          (click)="revealMap()"
+        >
+          Load Map
+        </button>
+      } @else {
+        <iframe
+          title="Stiles Sand & Gravel – Base Location"
+          class="mt-4 h-[360px] w-full rounded border-0"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=14440%20N%20Uldriks%20Dr,%20Battle%20Creek,%20MI%2049017&output=embed"
+        ></iframe>
+      }
+    </div>
+  </div>
+</section>

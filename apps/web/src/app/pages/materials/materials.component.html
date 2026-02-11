@@ -1,0 +1,26 @@
+<section class="mx-auto max-w-7xl px-4 py-14 lg:px-8">
+  <h1 class="text-4xl font-black text-white">Bulk Materials</h1>
+  <p class="mt-3 max-w-3xl text-neutral-300">
+    We stock high-demand materials for residential and commercial jobs and deliver from 1 to 15 yards in one
+    trip.
+  </p>
+
+  <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    @for (material of materials; track material.name; let i = $index) {
+      <article class="rounded-lg border border-neutral-700 bg-neutral-900/60 p-4">
+        <h2 class="text-xl font-bold text-yellow-300">{{ material.name }}</h2>
+        <p class="mt-2 text-sm text-neutral-300">{{ material.description }}</p>
+        @if (materialVisualMap()[material.name]; as mediaItem) {
+          <img
+            [src]="mediaItem.url"
+            [alt]="mediaItem.alt"
+            [width]="mediaItem.width"
+            [height]="mediaItem.height"
+            loading="lazy"
+            class="mt-3 h-40 w-full rounded object-cover"
+          />
+        }
+      </article>
+    }
+  </div>
+</section>

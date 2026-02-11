@@ -1,0 +1,110 @@
+<div class="min-h-screen bg-neutral-950 text-neutral-100">
+  <header class="sticky top-0 z-40 border-b border-neutral-800 bg-neutral-950/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 lg:px-8">
+      <a routerLink="/" class="flex items-center gap-2 text-white">
+        <img
+          src="/logo.png"
+          alt="Stiles Sand & Gravel logo"
+          width="40"
+          height="40"
+          class="h-10 w-10 rounded object-cover ring-1 ring-neutral-700"
+        />
+        <span class="text-sm font-black tracking-wide sm:text-base">{{ business.name }}</span>
+      </a>
+      <nav class="hidden items-center gap-4 text-sm md:flex">
+        @for (item of nav; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="text-yellow-400"
+            [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+            class="font-semibold text-neutral-200 transition hover:text-yellow-300"
+            >{{ item.label }}</a
+          >
+        }
+      </nav>
+      <a
+        [href]="business.phoneHref"
+        class="btn-brand rounded px-3 py-2 text-sm font-bold transition"
+      >
+        Call Now
+      </a>
+      <button
+        type="button"
+        class="inline-flex items-center rounded border border-neutral-600 px-3 py-2 text-sm font-bold text-neutral-100 md:hidden"
+        (click)="toggleMenu()"
+        aria-label="Toggle navigation menu"
+        [attr.aria-expanded]="menuOpen()"
+      >
+        {{ menuOpen() ? 'Close' : 'Menu' }}
+      </button>
+    </div>
+    @if (menuOpen()) {
+      <div class="border-t border-neutral-800 bg-neutral-900/95 px-4 py-3 md:hidden">
+        <nav class="flex flex-col gap-2 text-sm">
+          @for (item of nav; track item.path) {
+            <a
+              [routerLink]="item.path"
+              (click)="closeMenu()"
+              routerLinkActive="text-yellow-300"
+              [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+              class="rounded px-2 py-2 font-semibold text-neutral-100 hover:bg-neutral-800"
+              >{{ item.label }}</a
+            >
+          }
+          <a
+            [href]="business.phoneHref"
+            class="btn-brand mt-1 rounded px-3 py-2 text-center font-bold"
+            >Call Now</a
+          >
+          <a
+            routerLink="/contact"
+            (click)="closeMenu()"
+            class="rounded border border-yellow-400 px-3 py-2 text-center font-bold text-yellow-300"
+            >Request a Quote</a
+          >
+        </nav>
+      </div>
+    }
+  </header>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="border-t border-neutral-800 bg-neutral-900/70">
+    <div class="mx-auto grid max-w-7xl gap-6 px-4 py-10 lg:grid-cols-3 lg:px-8">
+      <div>
+        <h2 class="text-lg font-bold">{{ business.name }}</h2>
+        <p class="mt-2 text-sm text-neutral-300">
+          {{ business.address.street }}, {{ business.address.city }}, {{ business.address.state }}
+          {{ business.address.zip }}
+        </p>
+        <p class="mt-2 text-sm text-neutral-300">Serving Southwest Michigan and surrounding areas.</p>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold">Contact</h2>
+        <div class="mt-2 flex flex-col gap-2 text-sm">
+          <a [href]="business.phoneHref" class="text-neutral-200 hover:text-yellow-300">{{ business.phone }}</a>
+          <a [href]="business.smsHref" class="text-neutral-200 hover:text-yellow-300">Text Message</a>
+          <a [href]="'mailto:' + business.email" class="text-neutral-200 hover:text-yellow-300">{{
+            business.email
+          }}</a>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold">Get a Quote</h2>
+        <p class="mt-2 text-sm text-neutral-300">
+          Same-day and scheduled deliveries for sand, gravel, and bulk materials.
+        </p>
+        <a
+          routerLink="/contact"
+          class="mt-3 inline-block rounded border border-yellow-400 px-4 py-2 text-sm font-bold text-yellow-300 transition hover:bg-yellow-400 hover:text-neutral-950"
+          >Request a Quote</a
+        >
+      </div>
+    </div>
+    <div class="border-t border-neutral-800 px-4 py-4 text-center text-xs text-neutral-400">
+      © {{ year }} {{ business.name }}. All rights reserved.
+    </div>
+  </footer>
+</div>
