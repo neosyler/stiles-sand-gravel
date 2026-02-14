@@ -35,7 +35,15 @@ const insertQuote = db.prepare(`
 
 export function saveQuoteRequest(input: QuoteRequest): number {
   const result = insertQuote.run({
-    ...input,
+    name: input.name,
+    phone: input.phone,
+    email: input.email ?? '',
+    address: input.address ?? '',
+    city: input.city ?? '',
+    materialNeeded: input.materialNeeded ?? '',
+    quantityYards: input.quantityYards ?? '',
+    preferredDeliveryDate: input.preferredDeliveryDate ?? '',
+    notes: input.notes ?? '',
     createdAt: new Date().toISOString(),
   });
 
