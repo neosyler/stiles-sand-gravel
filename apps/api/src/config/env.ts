@@ -7,18 +7,28 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '../../../../');
 loadDotenv({ path: path.join(rootDir, '.env') });
 
+function envValue(key: string): string | undefined {
+  const value = process.env[key];
+  if (!value) {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
 export const env = {
-  nodeEnv: process.env['NODE_ENV'] ?? 'development',
-  port: Number(process.env['PORT'] ?? 3000),
-  baseUrl: process.env['BASE_URL'] ?? 'https://stilessandgravel.com',
-  corsOrigin: process.env['CORS_ORIGIN'] ?? '*',
-  mediaDir: process.env['MEDIA_DIR'] ?? path.join(rootDir, 'media'),
-  sqlitePath: process.env['SQLITE_PATH'] ?? path.join(rootDir, 'data', 'quotes.db'),
-  smtpHost: process.env['SMTP_HOST'],
-  smtpPort: Number(process.env['SMTP_PORT'] ?? 587),
-  smtpUser: process.env['SMTP_USER'],
-  smtpPass: process.env['SMTP_PASS'],
-  smtpFrom: process.env['SMTP_FROM'] ?? 'no-reply@stilessandgravel.com',
-  notifyEmail: process.env['NOTIFY_EMAIL'] ?? 'info@stilessandgravel.com',
-  turnstileSecret: process.env['TURNSTILE_SECRET'] ?? '',
+  nodeEnv: envValue('NODE_ENV') ?? 'development',
+  port: Number(envValue('PORT') ?? 3000),
+  baseUrl: envValue('BASE_URL') ?? 'https://stilessandgravel.com',
+  corsOrigin: envValue('CORS_ORIGIN') ?? '*',
+  mediaDir: envValue('MEDIA_DIR') ?? path.join(rootDir, 'media'),
+  sqlitePath: envValue('SQLITE_PATH') ?? path.join(rootDir, 'data', 'quotes.db'),
+  smtpHost: envValue('SMTP_HOST'),
+  smtpPort: Number(envValue('SMTP_PORT') ?? 587),
+  smtpUser: envValue('SMTP_USER'),
+  smtpPass: envValue('SMTP_PASS'),
+  smtpFrom: envValue('SMTP_FROM') ?? 'no-reply@stilessandgravel.com',
+  notifyEmail: envValue('NOTIFY_EMAIL') ?? 'info@stilessandgravel.com',
+  turnstileSecret: envValue('TURNSTILE_SECRET') ?? '',
 };
