@@ -156,6 +156,6 @@ app.get('*', async (req: Request, res: Response, next: NextFunction) => {
 
 app.use(errorHandler);
 
-app.listen(env.port, () => {
+app.listen(env.port, env.host, () => {
   console.log(`API + SSR server listening on http://localhost:${env.port}`);
 });

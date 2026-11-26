@@ -19,6 +19,7 @@ function envValue(key: string): string | undefined {
 
 export const env = {
   nodeEnv: envValue('NODE_ENV') ?? 'development',
+  host: envValue('HOST') ?? '127.0.0.1',
   port: Number(envValue('PORT') ?? 3000),
   baseUrl: envValue('BASE_URL') ?? 'https://stilessandgravel.com',
   corsOrigin: envValue('CORS_ORIGIN') ?? '*',
