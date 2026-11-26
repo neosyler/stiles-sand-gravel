@@ -1,5 +1,9 @@
 # Deploy stiles-sand-gravel
 
+## This VPS
+
+Use `sudo /usr/local/sbin/web-release stiles-sand-gravel --check` for a preflight and `sudo /usr/local/sbin/web-release stiles-sand-gravel` to deploy. The controller lives outside the checkout and runs dependency installation and builds under a dedicated non-root account. Use the original setup instructions below only on hosts without the controller.
+
 The production checkout is /var/www/stiles-sand-gravel and the HTTPS hostname is stilessandgravel.com. Build commands and outputs are listed in [app.sh](app.sh).
 
 ## Set up the host

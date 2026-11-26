@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# This VPS uses a host-owned build and activation controller.
+if [[ $EUID -eq 0 && -x /usr/local/sbin/web-release ]]; then
+  printf '%s\n' 'Use sudo /usr/local/sbin/web-release stiles-sand-gravel on this VPS.' >&2
+  exit 2
+fi
 set -Eeuo pipefail
 export GIT_TERMINAL_PROMPT=0
 umask 022
