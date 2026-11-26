@@ -5,10 +5,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import helmet from 'helmet';
-import { CommonEngine } from '@angular/ssr/node';
-import { APP_BASE_HREF } from '@angular/common';
-import type { ApplicationRef } from '@angular/core';
-import type { BootstrapContext } from '@angular/platform-browser';
 import { apiRouter } from './routes/index.js';
 import { env } from './config/env.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
@@ -75,11 +71,21 @@ if (fs.existsSync(browserDistPath)) {
   );
 }
 
+type RenderPage = (document: string, url: string, baseHref: string, allowedHosts: readonly string[]) => Promise<string>;
+
 interface SsrRuntime {
-  engine: CommonEngine;
-  bootstrap: (context: BootstrapContext) => Promise<ApplicationRef>;
-  templatePath: string;
+  render: RenderPage;
+  document: string;
 }
+
+const allowedSsrHosts = new Set([
+  'stilessandgravel.com',
+  'www.stilessandgravel.com',
+  'stilessandgravel.net',
+  'www.stilessandgravel.net',
+  'localhost',
+  '127.0.0.1',
+]);
 
 async function loadSsrRuntime(): Promise<SsrRuntime | null> {
   const candidateServerFiles = ['main.server.mjs', 'main.mjs', 'main.server.js', 'main.js'].map((file) =>
@@ -100,17 +106,15 @@ async function loadSsrRuntime(): Promise<SsrRuntime | null> {
 
   const moduleUrl = pathToFileURL(mainServerPath).href;
   const imported = (await import(moduleUrl)) as {
-    default?: (context: BootstrapContext) => Promise<ApplicationRef>;
+    render?: RenderPage;
+    default?: { render?: RenderPage };
   };
-  if (!imported.default) {
+  const render = imported.render ?? imported.default?.render;
+  if (!render) {
     return null;
   }
 
-  return {
-    engine: new CommonEngine(),
-    bootstrap: imported.default,
-    templatePath,
-  };
+  return { render, document: await fs.promises.readFile(templatePath, 'utf8') };
 }
 
 let ssrRuntime: SsrRuntime | null = null;
@@ -140,14 +144,12 @@ app.get('*', async (req: Request, res: Response, next: NextFunction) => {
         .send('Web app is not built yet. Run npm run build from repository root before npm run start.');
     }
 
-    const html = await ssrRuntime.engine.render({
-      bootstrap: ssrRuntime.bootstrap,
-      documentFilePath: ssrRuntime.templatePath,
-      url: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
-      publicPath: browserDistPath,
-      providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
-    });
+    const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
+    if (!allowedSsrHosts.has(url.hostname)) {
+      return res.status(400).send('Invalid request host');
+    }
 
+    const html = await ssrRuntime.render(ssrRuntime.document, url.href, req.baseUrl, [...allowedSsrHosts]);
     return res.send(html);
   } catch (error) {
     return next(error);
