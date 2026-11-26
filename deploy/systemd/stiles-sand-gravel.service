@@ -1,0 +1,21 @@
+[Unit]
+Description=stiles-sand-gravel (stiles-sand-gravel)
+After=network.target postgresql.service
+
+[Service]
+User=svc-stiles-sand
+Group=svc-stiles-sand
+WorkingDirectory=/var/www/stiles-sand-gravel
+ExecStart=/usr/bin/node dist/apps/api/server.js
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+EnvironmentFile=/var/www/stiles-sand-gravel/.env
+ReadWritePaths=/var/www/stiles-sand-gravel/data
+Environment=HOME=/nonexistent
+
+[Install]
+WantedBy=multi-user.target
